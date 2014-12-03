@@ -1,0 +1,64 @@
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Flarry bird</title>
+  <script src="phaser.min.js"></script>
+</head>
+<body>
+
+<h2>Press the spacebar to Jump </h2>
+<div id="gameDiv"></div>
+
+<script>
+  var game = new Phaser.Game(400, 490, Phaser.AUTO, 'gameDiv');
+
+  var mainState = {
+    preload: function() {
+      game.stage.backgroundColor = '#71c5cf';
+
+      game.physics.startSystem(Phaser.Physics.ARCADE);
+
+      // Load the bird sprite
+      game.load.image('bird', 'assets/bird.png');
+
+      // Load the pipe sprite
+      game.load.image('pipe', 'assets/pipe.png');
+
+    },
+
+    create: function() {
+      this.bird = game.add.sprite(100, 100, 'bird');
+
+      // Velocity
+      game.physics.enable(this.bird, Phaser.Physics.ARCADE);
+      this.bird.body.velocity.y = 400;
+      this.bird.body.collideWorldBounds = true;
+      this.bird.body.bounce.setTo(0, 0.5);
+
+
+      this.pipes = game.add.group();
+
+      for (var i = 0; i < 5; i++) {
+        var x = game.rnd.integerInRange(50, game.world.width - 20);
+        var y = game.rnd.integerInRange(50, game.world.height - 20);
+        this.pipe = game.add.sprite(x, y, 'pipe');
+        this.pipe.scale.x = 0.5;
+        this.pipe.scale.y = 0.5;
+        game.physics.enable(this.pipe, Phaser.Physics.ARCADE);
+        this.pipe.body.collideWorldBounds = true;
+        this.pipes.add(this.pipe);
+
+
+      }
+    },
+
+    update: function() {
+      game.physics.arcade.collide(this.bird, this.pipes);
+    }
+  };
+
+  game.state.add('main', mainState);
+  game.state.start('main');
+</script>
+</body>
+</html>

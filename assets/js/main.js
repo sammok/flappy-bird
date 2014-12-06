@@ -4,6 +4,8 @@ var game = new Phaser.Game(400, 490, Phaser.AUTO, 'gameDiv');
 
 // Create our 'main' state that will contain the game
 var mainState = {
+  statue: true,
+
   preload: function() {
     game.stage.backgroundColor = '#71c5cf';
 
@@ -70,7 +72,9 @@ var mainState = {
 
     // Bird in world
     if (this.bird.inWorld == false) {
-      this.gameEnd();
+      if (this.statue) {
+        this.gameEnd();
+      }
     }
 
     if (this.bird.angle < 20) {
@@ -152,7 +156,7 @@ var mainState = {
   },
 
   gameEnd: function() {
-
+    this.statue = false;
     // Stop pipe
     game.time.events.remove(this.timer);
     // Game end
@@ -163,15 +167,7 @@ var mainState = {
 
     this.endTxt.text = "Game Over!!!\n score: " + this.score;
     this.endTxt.anchor.set(0.5, 0.5);
-
-    setTimeout( function (){
-      if(confirm('Play again??')) {
-        alert();
-        game.state.start('main');
-      } else {
-        return;
-      }
-    }, 2500);
+    //turn off game
   }
 };
 
